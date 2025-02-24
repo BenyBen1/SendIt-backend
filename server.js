@@ -9,8 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 // Import the orders router
-const ordersRouter = require('./routes/orders');
-app.use('/orders', ordersRouter); // ✅ This should work
+const ordersRouter = require('./routes/ordersRoute');
+app.use('/orders', ordersRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
