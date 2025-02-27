@@ -20,6 +20,7 @@
   "homepage": "https://github.com/BenyBen1/SendIt-backend#readme",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "g": "^2.0.1",
     "mongoose": "^8.4.0",
