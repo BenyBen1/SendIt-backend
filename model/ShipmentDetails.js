@@ -16,7 +16,7 @@ const shipmentSchema = new mongoose.Schema({
   packageWeight: { type: Number, required: true },
   paymentMethod: { type: String, required: true },
   specialInstructions: { type: String, default: "None" },
-  status: { type: String, enum: ["Pending", "In Transit", "Delivered"], default: "Pending" },
+  status: { type: String, enum: ["Pending", "In transit", "Delivered"], default: "Pending" },
   createdAt: { type: Date, default: Date.now }
 });
 
