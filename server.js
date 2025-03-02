@@ -1,11 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 
 const app = express();
 const port = 5000;
-
-mongoose.connect('mongodb://localhost:27017/userDb')
 
 // Middleware
 app.use(cors());
