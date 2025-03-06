@@ -6,25 +6,33 @@ const bcrypt = require("bcrypt");
 // POST /auth/register
 router.post("/register", async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
+
+    // Check if email is already in use
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(400).json({ error: "Email already exists!" });
     }
 
+    // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      email,
-      password: hashedPassword,
-      role: role || "user",
-    });
+
+    // Create and save new user
+    const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Registration Error:", error);
+
+    if (error.code === 11000) {
+      return res.status(400).json({ error: "Email is already registered!" });
+    }
+
+    res.status(500).json({ error: "Server error!" });
   }
 });
+
 
 // POST /auth/login
 router.post("/login", async (req, res) => {
@@ -51,7 +59,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ NEW: GET /auth/session (Check if user is logged in)
+//GET /auth/session (Check if user is logged in)
 router.get("/session", (req, res) => {
   if (req.session.user) {
     res.json({ isAuthenticated: true, user: req.session.user });
