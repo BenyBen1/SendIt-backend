@@ -12,11 +12,12 @@ const isAuthenticated = (req, res, next) => {
 
 // Middleware to check admin privileges
 const isAdmin = (req, res, next) => {
-  if (!req.session.user?.isAdmin) {
+  if (req.session.user?.role !== "admin") {
     return res.status(403).json({ error: "Forbidden: Admin access required" });
   }
   next();
 };
+
 
 // Create a new order
 router.post("/", isAuthenticated, async (req, res) => {
