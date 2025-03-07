@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Add this
     senderName: { type: String },
     senderAddress: { type: String },
     senderContact: { type: String },
@@ -15,7 +16,7 @@ const orderSchema = new mongoose.Schema(
     pickupDropoff: { type: String, enum: ["pickup", "door"], default: "pickup" },
     paymentMethod: { type: String, enum: ["cash", "credit-card"] },
     status: { type: String, enum: ["Pending", "In Progress", "Delivered"], default: "Pending" },
-    balance: { type: Number, default: 0 }, // Optional field for balance tracking
+    balance: { type: Number, default: 0 }, 
   },
   { timestamps: true }
 );

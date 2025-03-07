@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Orders");
+const mongoose = require("mongoose");
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
@@ -22,6 +23,12 @@ const isAdmin = (req, res, next) => {
 // Create a new order
 router.post("/", isAuthenticated, async (req, res) => {
   try {
+    // Debugging logs
+    console.log("🔍 Session Data:", req.session);
+    if (!req.session.user || !req.session.user._id) {
+      return res.status(400).json({ error: "User ID is missing from session. Please log in." });
+    }
+
     const newOrder = new Order({
       ...req.body,
       userId: req.session.user._id, // Assign user ID automatically
@@ -34,6 +41,7 @@ router.post("/", isAuthenticated, async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 });
+
 
 // Get all orders (Admin only)
 router.get("/", isAuthenticated, isAdmin, async (req, res) => {
@@ -58,12 +66,18 @@ router.get("/user/:userId", isAuthenticated, async (req, res) => {
 // Get logged-in user's orders
 router.get("/my-orders", isAuthenticated, async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.session.user._id });
+    console.log("🔍 Session Data:", req.session); // Debugging
+    console.log("🔍 User ID:", req.session.user._id);
+
+    const orders = await Order.find({ userId: req.session.user._id }); // Correct query
+
     res.status(200).json(orders);
   } catch (error) {
+    console.error("❌ Error fetching user orders:", error);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 });
+
 
 // Update an order (Only owner or admin)
 router.put("/:id", isAuthenticated, async (req, res) => {

@@ -8,10 +8,10 @@ const ordersRoutes = require("./routes/ordersRoute");
 
 const app = express();
 
-// ✅ Enable CORS for frontend access with credentials
+// CORS for frontend access with credentials
 app.use(
   cors({
-    origin: "http://192.168.0.175:19006", // Replace with your frontend URL
+    origin: "http://192.168.0.175:19006",
     credentials: true, // Allow cookies to be sent
   })
 );
@@ -27,13 +27,13 @@ app.use(
   })
 );
 
-// ✅ Routes
+//Routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 
 app.use("/orders", ordersRoutes);
 
-// ✅ Check session route (AFTER middleware)
+// Check session route
 app.get("/auth/session", (req, res) => {
   if (req.session && req.session.user) {
     res.json({ isAuthenticated: true, user: req.session.user });
@@ -42,7 +42,7 @@ app.get("/auth/session", (req, res) => {
   }
 });
 
-// ✅ MongoDB connection with error handling
+//MongoDB connection with error handling
 mongoose
   .connect("mongodb://localhost:27017/userDb", {
     useNewUrlParser: true,
@@ -51,6 +51,6 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-// ✅ Start Server
+//Start Server
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
